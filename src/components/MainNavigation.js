@@ -2,7 +2,7 @@ import { NavLink } from "react-router-dom";
 // import "../css/style.css";
 // import "../css/bootstrap.min.css";
 import "../css/font-awesome.min.css";
-import "../css/nav-bar-goros.css"
+import "../css/main-navigation.css"
 
 function MainNavigation() {
   return (

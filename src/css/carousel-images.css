@@ -1,0 +1,24 @@
+.carousel__main {
+  margin-bottom: 30px;
+  width: 80vw;
+
+}
+
+.carousel__images {
+    width: 100vw;
+  }
+  
+  .image__container {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    flex-direction: row;
+    top: 30px;
+    position: relative;
+  }
+  
+  .image__container--image {
+    height: 400px;
+    width: 1200px;
+  
+  }

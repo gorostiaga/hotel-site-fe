@@ -5,6 +5,7 @@ import "../css/test_bed.css";
 // import "../css/owl.carousel.min.css";
 import ArrayBannerDiv from "../components/ArrayBannerDiv";
 import CarouselDiv from "../components/CarouselDiv";
+import { Link } from "react-router-dom";
 
 
 function HomePage(props) {
@@ -215,9 +216,10 @@ function HomePage(props) {
                   <span>From $250/night</span>
                   <h3>Superior Room</h3>
                 </div>
-                <a href="#" class="line-button">
+                {/* <a href="#" class="line-button">
                   book now
-                </a>
+                </a> */}
+                <Link to={"rooms/1"} className="line-button"> book now</Link>
               </div>
             </div>
           </div>

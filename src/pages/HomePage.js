@@ -24,7 +24,7 @@ function HomePage(props) {
       {/* <!-- slider_area_end --> */}
 
       {/* <!-- about_area_start --> */}
-      <div class="about_area">
+      <div id="about__section" class="about_area">
         <div class="container">
           <div class="row">
             <div class="col-xl-5 col-lg-5">
@@ -196,7 +196,7 @@ function HomePage(props) {
       {/* <!-- about_area_end --> */}
 
       {/* <!-- features_room_startt --> */}
-      <div class="features_room">
+      <div id="room__section" class="features_room">
         <div class="container">
           <div class="row">
             <div class="col-xl-12">
@@ -270,7 +270,7 @@ function HomePage(props) {
       {/* <!-- features_room_end --> */}
 
       {/* <!-- forQuery_start --> */}
-      <div class="forQuery">
+      <div id="contact__section" class="forQuery">
         <div class="container">
           <div class="row">
             <div class="col-xl-10 offset-xl-1 col-md-12">
@@ -278,7 +278,7 @@ function HomePage(props) {
                 <div class="row align-items-center justify-content-center">
                   <div class="col-xl-6 col-md-6">
                     <div class="Query_text">
-                      <p>For Reservation 0r Query?</p>
+                      <p>Para Reservaciones o Consultas</p>
                     </div>
                   </div>
                   <div class="col-xl-6 col-md-6">

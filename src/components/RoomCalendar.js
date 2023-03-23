@@ -3,7 +3,8 @@ import Calendar from "react-calendar";
 
 import "./RoomCalendar.module.css";
 import classes from "./RoomCalendar.module.css";
-import "react-calendar/dist/Calendar.css";
+// import "react-calendar/dist/Calendar.css";
+import "../css/Calendar.css";
 
 function RoomCalendar(props) {
   let reservedDatesArray = [];
@@ -71,10 +72,7 @@ function RoomCalendar(props) {
       console.log(partsDate[0]+ '-' + +partsDate[1]+ '-' +partsDate[2]);
       console.log('original ' + year + '-' + month + '-' +day);
       isDisabled = year === +partsDate[0] && month === +partsDate[1] && day === +partsDate[2];
-    //   if (isDisabled) {
-    //     console.log('es igual!!');
-    //     return; 
-    // }
+
     isDisabled = year === +partsDate[0] && month === +partsDate[1] && day === +partsDate[2];
       if (isDisabled) {
         console.log('es igual!!');

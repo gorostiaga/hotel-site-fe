@@ -5,6 +5,9 @@ import RoomCalendar from "../components/RoomCalendar";
 import Button from "../components/Button";
 import { useState } from "react";
 import BookingForm from "../components/BookingForm";
+import Alert from "react-bootstrap/Alert";
+import "../css/room-details-page.css";
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 function RoomDetailsPage(props) {
   const [date, setDate] = useState([]);
@@ -12,7 +15,6 @@ function RoomDetailsPage(props) {
   const [errorDate, setErrorDate] = useState(false);
   const [booking, setBooking] = useState(false);
   const [data, reservation] = useRouteLoaderData("room-details");
-
 
   let clickedDate;
 
@@ -50,18 +52,29 @@ function RoomDetailsPage(props) {
     <>
       <RoomItem room={data.room} />
       <form onSubmit={submitHandler}>
-        <div>
-          <RoomCalendar onChange={onChangeHandler} onClick={onClickHandler} 
-            reservation={reservation.schedule}
-          />
-          {errorDate ? (
-            <p>Tienes que seleccionar fecha inicio y fecha de salida</p>
-          ) : null}
+        <Alert key={"light"} variant="light">
+          Seleccione las fechas que desea reservar. Luego de selectionar las
+          fechas presione Reservar para llenar sus datos correspondientes!
+          Disfrute su estadia!
+        </Alert>
+        <div className="room__calendar__container">
+          <div>
+            <RoomCalendar
+              onChange={onChangeHandler}
+              onClick={onClickHandler}
+              reservation={reservation.schedule}
+            />
+            {errorDate ? (
+              <Alert key={"danger"} variant="danger">
+              Tienes que seleccionar fecha inicio y fecha de salida
+              </Alert>
+            ) : null}
+          </div>
+          <Button type="submit" onSubmit={submitHandler}>
+            {" "}
+            Reservar{" "}
+          </Button>
         </div>
-        <Button type="submit" onSubmit={submitHandler}>
-          {" "}
-          Reservar{" "}
-        </Button>
       </form>
       <div>
         {booking ? (

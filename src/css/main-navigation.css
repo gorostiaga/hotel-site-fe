@@ -73,6 +73,24 @@
   margin: 0.3rem 0;
 }
 
+.mobile-nav__items {
+  width: 90%;
+  height: 100%;
+  list-style: none;
+  margin: 0 auto ;
+  padding: 0;
+  /* text-align: center; out bs of flexbox */
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.mobile-nav__item {
+  margin: 1rem auto;
+
+}
+
 /* @media (min-width: 992px) {
   .toggle-button {
     display: none;

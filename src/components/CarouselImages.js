@@ -41,7 +41,7 @@ function CarouselImages({ images }) {
     <div>
       <Slider {...settings}>
         {images.map((image) => (
-          <Image src={image.path} thumbnail onClick={e => imageClickHandler(image.path, e)}/>
+          <Image src={image.path} thumbnail onClick={e => imageClickHandler(image.path, e)} key={image.name}/>
         ))}
       </Slider>
       {openImage && <ImageShowCase imageSource={imageSource} onCloseButton={closeHandler} />}      </div>

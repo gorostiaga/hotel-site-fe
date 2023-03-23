@@ -1,11 +1,10 @@
 import React from "react";
-import classes from "./RoomItem.module.css";
 import CarouselImages from "./CarouselImages";
 import "../css/carousel-images.css";
 
 function RoomItem({ room }) {
   return (
-    <article className={classes.room}>
+    <article className="article__carousel">
       <div className="carousel__main">
         <CarouselImages images={room.images} />
       </div>

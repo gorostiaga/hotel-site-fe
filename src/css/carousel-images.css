@@ -1,7 +1,13 @@
+.article__carousel {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
 .carousel__main {
   margin-bottom: 30px;
-  width: 80vw;
-
+  width: 70%;
 }
 
 .carousel__images {
@@ -20,5 +26,4 @@
   .image__container--image {
     height: 400px;
     width: 1200px;
-  
   }

@@ -40,7 +40,8 @@
   }
   
   .form input,
-  .form textarea {
-    font: inherit;
+  .form textarea,
+  .form div {
+    font: sans-serif;
     padding: 0.25rem;
   }

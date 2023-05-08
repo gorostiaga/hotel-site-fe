@@ -1,16 +1,146 @@
-import React from "react";
+import React, { useReducer, useEffect } from "react";
 import { Form, redirect, json } from "react-router-dom";
+import 'bootstrap/dist/css/bootstrap.min.css';
 import classes from "./BookingForm.module.css";
 import { useState, useRef } from "react";
+import Alert from 'react-bootstrap/Alert';
+
+const formReducer = (state, action) => {
+  switch (action.type) {
+    case "IDDOCUMENT_BLUR":
+      return {
+        ...state,
+        isIdDocumentNotEmpty: action.idDocumentVal.trim() !== "",
+      };
+
+    case "FIRSTNAME_BLUR":
+      return {
+        ...state,
+        isFirstNameNotEmpty: action.fistNameVal.toString().trim() !== "",
+      };
+
+    case "LASTNAME_BLUR":
+      return {
+        ...state,
+        isLastNameNotEmpty: action.lastNameVal.trim() !== "",
+      };
+
+    case "PEOPLE_BLUR":
+      return {
+        ...state,
+        isPeopleNotEmppty: action.peopleVal.trim() !== "",
+        isPeopleValid: !isNaN(action.peopleVal),
+      };
+
+    case "EMAIL_BLUR":
+      return {
+        ...state,
+        isEmailNotEmpty: action.emailVal.trim() !== "",
+        isEmailValid: action.emailVal.includes("@"),
+      };
+
+    case "PHONE_BLUR":
+      return {
+        ...state,
+        isPhoneNotEmpty: action.phoneVal.trim() !== "",
+        isPhoneValid: !isNaN(action.phoneVal),
+      };
+
+    case "ORIGINCITY_BLUR":
+      return {
+        ...state,
+        isOriginCityNotEmpty: action.originCityVal.trim() !== "",
+      };
+    
+      case "SAVED_FORM":
+        return{
+        isIdDocumentNotEmpty: true,
+        isFirstNameNotEmpty: true,
+        isLastNameNotEmpty: true,
+        isEmailNotEmpty: true,
+        isEmailValid: true,
+        isPhoneNotEmpty: true,
+        isPhoneValid: true,
+        isOriginCityNotEmpty: true,
+        };
+    //default state
+    default:
+      return {
+        isIdDocumentNotEmpty: false,
+        isFirstNameNotEmpty: false,
+        isLastNameNotEmpty: false,
+        isPeopleNotEmppty: false,
+        isPeopleValid: false,
+        isEmailNotEmpty: false,
+        isEmailValid: false,
+        isPhoneNotEmpty: false,
+        isPhoneValid: false,
+        isOriginCityNotEmpty: false,
+        isFormValid: false,
+      };
+  }
+
+  // if (action.type === "FORM_SUBMIT") {
+  //   console.log("entro a FORM_SUBMIT");
+  //   console.log(action.idDocumentVal.trim());
+  //   console.log(action.fistNameVal.toString().trim());
+  //   //check if the inputs of the forms and the form itself are not empty
+  //   // and additionally check that email inpyt and phone input are valid values
+  //   return {
+  //     isIdDocumentNotEmpty: action.idDocumentVal.trim() !== "",
+  //     isFirstNameNotEmpty: action.fistNameVal.toString().trim() !== "",
+  //     isLastNameNotEmpty: action.lastNameVal.trim() !== "",
+  //     isPeopleNotEmppty: action.peopleVal.trim() !== "",
+  //     isPeopleValid: !isNaN(action.peopleVal),
+  //     isEmailNotEmpty: action.emailVal.trim() !== "",
+  //     isEmailValid: action.emailVal.includes("@"),
+  //     isPhoneNotEmpty: action.phoneVal.trim() !== "",
+  //     isPhoneValid: !isNaN(action.phoneVal),
+  //     isOriginCityNotEmpty: action.originCityVal.trim() !== "",
+  //     isFormValid:
+  //       state.isIdDocumentNotEmpty &&
+  //       state.isFirstNameNotEmpty &&
+  //       state.isLastNameNotEmpty &&
+  //       state.isPeopleNotEmppty &&
+  //       state.isPeopleValid &&
+  //       state.isEmailNotEmpty &&
+  //       state.isEmailValid &&
+  //       state.isPhoneNotEmpty &&
+  //       state.isPhoneValid &&
+  //       state.isOriginCityNotEmpty,
+  //   };
+  // }
+};
 
 function BookingForm({ method, date, onCancel }) {
   const [savedForm, setSavedForm] = useState({});
   const [isSavedForm, setIsSavedForm] = useState(false);
   const [isAgreed, setIsAgreed] = useState(false);
+  const [formIsValid, setFormIsValid] = useState(false);
+  const [formState, dispatchForm] = useReducer(formReducer, {
+    // idDocumentValue: "",
+    // firstNameValue: "",
+    // lastNameValue: "",
+    // emailValue: "",
+    // phoneValue: "",
+    // originCityValue: "",
+    isIdDocumentNotEmpty: false,
+    isFirstNameNotEmpty: false,
+    isLastNameNotEmpty: false,
+    isPeopleNotEmppty: false,
+    isPeopleValid: false,
+    isEmailNotEmpty: false,
+    isEmailValid: false,
+    isPhoneNotEmpty: false,
+    isPhoneValid: false,
+    isOriginCityNotEmpty: false,
+    isFormValid: false,
+  });
 
   const idDocumentInputRef = useRef();
   const firstNameInputRef = useRef();
   const lastNameInputRef = useRef();
+  const peopleInputRef = useRef();
   const emailInputRef = useRef();
   const phoneInputRef = useRef();
   const originCityInputRef = useRef();
@@ -18,6 +148,31 @@ function BookingForm({ method, date, onCancel }) {
   const dates = [...date];
 
   console.log(dates);
+
+  useEffect(() => {
+    setFormIsValid(
+      formState.isIdDocumentNotEmpty &&
+        formState.isFirstNameNotEmpty &&
+        formState.isLastNameNotEmpty &&
+        formState.isPeopleNotEmppty &&
+        formState.isPeopleValid &&
+        formState.isEmailNotEmpty &&
+        formState.isEmailValid &&
+        formState.isPhoneNotEmpty &&
+        formState.isPhoneValid &&
+        formState.isOriginCityNotEmpty
+    );
+  }, [formState.isIdDocumentNotEmpty,
+    formState.isFirstNameNotEmpty,
+    formState.isLastNameNotEmpty,
+    formState.isPeopleNotEmppty,
+    formState.isPeopleValid,
+    formState.isEmailNotEmpty,
+    formState.isEmailValid,
+    formState.isPhoneNotEmpty,
+    formState.isPhoneValid,
+    formState.isOriginCityNotEmpty
+  ]);
 
   const cancelHandler = () => {
     onCancel(false);
@@ -39,8 +194,13 @@ function BookingForm({ method, date, onCancel }) {
     const numberNights = Math.round(difference / (1000 * 3600 * 24) - 1);
     return numberNights;
   };
-  const blurHanlder = async (e) => {
+  const idDocumentBlurHanlder = async (e) => {
     console.log(e.target.value);
+    dispatchForm({
+      type: "IDDOCUMENT_BLUR",
+      idDocumentVal: idDocumentInputRef.current.value,
+    });
+
     const response = await fetch(
       "http://localhost:8080/user/" + e.target.value
     );
@@ -48,9 +208,54 @@ function BookingForm({ method, date, onCancel }) {
       const data = await response.json();
       setSavedForm(data.user);
       setIsSavedForm(true);
+      dispatchForm({
+        type: "SAVED_FORM",
+      });
       return;
     }
     setIsSavedForm(false);
+  };
+
+  const firstNameBlurHandler = () => {
+    dispatchForm({
+      type: "FIRSTNAME_BLUR",
+      fistNameVal: firstNameInputRef.current.value,
+    });
+  };
+
+  const lastNameBlurHandler = () => {
+    dispatchForm({
+      type: "LASTNAME_BLUR",
+      lastNameVal: lastNameInputRef.current.value,
+    });
+  };
+
+  const peopleBlurHandler = () => {
+    dispatchForm({
+      type: "PEOPLE_BLUR",
+      peopleVal: peopleInputRef.current.value,
+    });
+  };
+
+  const emailBlurHandler = () => {
+    dispatchForm({
+      type: "EMAIL_BLUR",
+      emailVal: emailInputRef.current.value,
+    });
+  };
+
+  const phoneBlurHandler = () => {
+    dispatchForm({
+      type: "PHONE_BLUR",
+      phoneVal: phoneInputRef.current.value,
+    });
+  };
+
+  const originCityBlurHandler = () => {
+    dispatchForm({
+      type: "ORIGINCITY_BLUR",
+      originCityVal: originCityInputRef.current.value,
+    });
   };
 
   const userSaver = async (m) => {
@@ -93,42 +298,105 @@ function BookingForm({ method, date, onCancel }) {
     }
   };
 
-  const clickHandler = (e) => {
+  // const dispatcherUpdater = () => {
+  //   return new Promise((resolve) => {
+  //     dispatchForm(
+  //       {
+  //         type: "FORM_SUBMIT",
+  //         idDocumentVal: idDocumentInputRef.current.value,
+  //         fistNameVal: firstNameInputRef.current.value,
+  //         lastNameVal: lastNameInputRef.current.value,
+  //         peopleVal: peopleInputRef.current.value,
+  //         emailVal: emailInputRef.current.value,
+  //         phoneVal: phoneInputRef.current.value,
+  //         originCityVal: originCityInputRef.current.value,
+  //       },
+  //       () => {
+  //         resolve();
+  //       }
+  //     );
+  //   });
+  // };
+
+  const checkBoxClickHandler = async (e) => {
     if (e.target.checked) {
       setIsAgreed(true);
     } else {
       setIsAgreed(false);
     }
 
+    // this stuff is to check the validity of all the inputs of the form
+    // and also the overall validity of the form itself
+    // dispatchForm({
+    //   type: "FORM_SUBMIT",
+    //   idDocumentVal: idDocumentInputRef.current.value,
+    //   fistNameVal: firstNameInputRef.current.value,
+    //   lastNameVal: lastNameInputRef.current.value,
+    //   peopleVal: peopleInputRef.current.value,
+    //   emailVal: emailInputRef.current.value,
+    //   phoneVal: phoneInputRef.current.value,
+    //   originCityVal: originCityInputRef.current.value,
+    // });
+    // console.log(
+    //   formState.isIdDocumentNotEmpty +"\n"+
+    //   formState.isFirstNameNotEmpty +"\n"+
+    //   formState.isLastNameNotEmpty +"\n"+
+    //   formState.isPeopleNotEmppty +"\n"+
+    //   formState.isPeopleValid +"\n"+
+    //   formState.isEmailNotEmpty +"\n"+
+    //   formState.isEmailValid +"\n"+
+    //   formState.isPhoneNotEmpty +"\n"+
+    //   formState.isPhoneValid +"\n"+
+    //   formState.isOriginCityNotEmpty +"\n"+
+    //   formState.isFormValid
+    // );
+    setFormIsValid(formState.isIdDocumentNotEmpty &&
+      formState.isFirstNameNotEmpty &&
+      formState.isLastNameNotEmpty &&
+      formState.isPeopleNotEmppty &&
+      formState.isPeopleValid &&
+      formState.isEmailNotEmpty &&
+      formState.isEmailValid &&
+      formState.isPhoneNotEmpty &&
+      formState.isPhoneValid &&
+      formState.isOriginCityNotEmpty
+      );
+
+
     // this stuff checks whether there was an change in the any input of the
     // form that has changed or not
-    if (e.target.checked && isSavedForm) {
-      if (savedForm.firstName != firstNameInputRef.current.value) {
-        userSaver("PUT");
+    // only if all the inputs from the form are valid
+    if (formIsValid) {
+      console.log("foisFormValid true");
+      if (e.target.checked && isSavedForm) {
+        console.log("entra wey");
+        if (savedForm.firstName != firstNameInputRef.current.value) {
+          userSaver("PUT");
+          return;
+        }
+        if (savedForm.lastName != lastNameInputRef.current.value) {
+          userSaver("PUT");
+          return;
+        }
+        if (savedForm.email != emailInputRef.current.value) {
+          userSaver("PUT");
+          return;
+        }
+        if (savedForm.phone != phoneInputRef.current.value) {
+          userSaver("PUT");
+          return;
+        }
+        if (savedForm.originCity != originCityInputRef.current.value) {
+          userSaver("PUT");
+          return;
+        }
+      }
+      if (e.target.checked && !isSavedForm) {
+        userSaver("POST");
         return;
       }
-      if (savedForm.lastName != lastNameInputRef.current.value) {
-        userSaver("PUT");
-        return;
-      }
-      if (savedForm.email != emailInputRef.current.value) {
-        userSaver("PUT");
-        return;
-      }
-      if (savedForm.phone != phoneInputRef.current.value) {
-        userSaver("PUT");
-        return;
-      }
-      if (savedForm.originCity != originCityInputRef.current.value) {
-        userSaver("PUT");
-        return;
-      }
+      userSaver(null);
     }
-    if (e.target.checked && !isSavedForm) {
-      userSaver("POST");
-      return;
-    }
-    userSaver(null);
   };
 
   const initialDate = dateConverter(dates[0]);
@@ -174,7 +442,7 @@ function BookingForm({ method, date, onCancel }) {
           />
         </p>
         <br />
-
+        <div>
         <p>
           <label htmlFor="idDocument">Carnet de Identidad</label>
           <input
@@ -182,10 +450,15 @@ function BookingForm({ method, date, onCancel }) {
             type="text"
             name="idDocument"
             required
-            onBlur={blurHanlder}
+            onBlur={idDocumentBlurHanlder}
             ref={idDocumentInputRef}
           />
-        </p>
+          </p>
+          {isAgreed && !formState.isIdDocumentNotEmpty && <Alert key="danger" variant="danger">
+          Debes llenar esta casilla 
+        </Alert>}
+        </div>
+        <div>
         <p>
           <label htmlFor="firstName">Nombre</label>
           <input
@@ -195,8 +468,14 @@ function BookingForm({ method, date, onCancel }) {
             required
             defaultValue={isSavedForm ? savedForm.firstName : ""}
             ref={firstNameInputRef}
+            onBlur={firstNameBlurHandler}
           />
-        </p>
+          </p>
+          {isAgreed && !formState.isFirstNameNotEmpty && <Alert key="danger" variant="danger">
+          Debes llenar esta casilla 
+        </Alert>}
+        </div>
+        <div>
         <p>
           <label htmlFor="lastName">Apellido</label>
           <input
@@ -206,12 +485,33 @@ function BookingForm({ method, date, onCancel }) {
             required
             defaultValue={isSavedForm ? savedForm.lastName : ""}
             ref={lastNameInputRef}
+            onBlur={lastNameBlurHandler}
           />
-        </p>
+          </p>
+          {isAgreed && !formState.isLastNameNotEmpty && <Alert key="danger" variant="danger">
+          Debes llenar esta casilla 
+        </Alert>}
+        </div>
+        <div>
         <p>
           <label htmlFor="people">Cantidad de personas</label>
-          <input id="people" type="text" name="people" required />
-        </p>
+          <input
+            id="people"
+            type="text"
+            name="people"
+            required
+            ref={peopleInputRef}
+            onBlur={peopleBlurHandler}
+          />
+          </p>
+          {isAgreed && !formState.isPeopleNotEmppty && <Alert key="danger" variant="danger">
+          Debes llenar esta casilla 
+        </Alert>}
+        {isAgreed && !formState.isPeopleValid && <Alert key="danger" variant="danger">
+          Debe ser un número 
+        </Alert>}
+        </div>
+        <div>
         <p>
           <label htmlFor="email">Correo Electrónico</label>
           <input
@@ -221,8 +521,17 @@ function BookingForm({ method, date, onCancel }) {
             required
             defaultValue={isSavedForm ? savedForm.email : ""}
             ref={emailInputRef}
+            onBlur={emailBlurHandler}
           />
-        </p>
+          </p>
+          {isAgreed && !formState.isEmailNotEmpty && <Alert key="danger" variant="danger">
+          Debes llenar esta casilla 
+        </Alert>}
+        {isAgreed && !formState.isEmailValid && <Alert key="danger" variant="danger">
+          Debe ser un email válido 
+        </Alert>}
+        </div>
+        <div>
         <p>
           <label htmlFor="phone">Telefono Celular</label>
           <input
@@ -232,9 +541,18 @@ function BookingForm({ method, date, onCancel }) {
             required
             defaultValue={isSavedForm ? savedForm.phone : ""}
             ref={phoneInputRef}
+            onBlur={phoneBlurHandler}
           />
-        </p>
+          </p>
+          {isAgreed && !formState.isPhoneNotEmpty && <Alert key="danger" variant="danger">
+          Debes llenar esta casilla 
+        </Alert>}
+        {isAgreed && !formState.isPhoneValid && <Alert key="danger" variant="danger">
+          Debe ser un teléfono válido
+        </Alert>}
+        </div>
 
+        <div>
         <p>
           <label htmlFor="originCity">Ciudad de Origen</label>
           <input
@@ -244,14 +562,19 @@ function BookingForm({ method, date, onCancel }) {
             required
             defaultValue={isSavedForm ? savedForm.originCity : ""}
             ref={originCityInputRef}
+            onBlur={originCityBlurHandler}
           />
-        </p>
+          </p>
+          {isAgreed && !formState.isOriginCityNotEmpty && <Alert key="danger" variant="danger">
+          Debes llenar esta casilla 
+        </Alert>}
+        </div>
         <p>
           <input
             type="checkbox"
             id="agreement"
             name="agreement"
-            onClick={clickHandler}
+            onClick={checkBoxClickHandler}
           />
           <label htmlFor="agreement">
             Esta de acuerdo con los terminos y condiciones?
@@ -261,7 +584,7 @@ function BookingForm({ method, date, onCancel }) {
           <button type="button" onClick={cancelHandler}>
             Cancel
           </button>
-          {isAgreed ? <button>Save</button> : null}
+          {isAgreed && formIsValid ? <button>Save</button> : null}
         </div>
       </Form>
     </>
